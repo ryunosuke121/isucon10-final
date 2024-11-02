@@ -14,7 +14,7 @@ DB_PATH:=/etc/mysql
 SYSTEMD_PATH:=/etc/systemd/system
 
 #NGINX_LOG:=/var/log/nginx/access.log
-DB_SLOW_LOG:=/var/log/mysql/mariadb-slow.log
+# DB_SLOW_LOG:=/var/log/mysql/mariadb-slow.log
 
 # メインで使うコマンド ------------------------
 
@@ -127,7 +127,7 @@ restart:
 	sudo systemctl daemon-reload
 	sudo systemctl restart $(SERVICE_NAME)
 	sudo systemctl restart mysql
-	sudo systemctl restart nginx
+	# sudo systemctl restart nginx
 
 
 
