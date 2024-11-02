@@ -20,6 +20,7 @@ import (
 	"github.com/isucon/isucon10-final/webapp/golang/proto/xsuportal/resources"
 	"github.com/isucon/isucon10-final/webapp/golang/proto/xsuportal/services/bench"
 	"github.com/isucon/isucon10-final/webapp/golang/util"
+	"github.com/kaz/pprotein/integration/standalone"
 )
 
 var db *sqlx.DB
@@ -288,6 +289,10 @@ func main() {
 
 	bench.RegisterBenchmarkQueueService(server, queue.Svc())
 	bench.RegisterBenchmarkReportService(server, report.Svc())
+
+	go func() {
+		standalone.Integrate(":19001")
+	}()
 
 	if err := server.Serve(listener); err != nil {
 		panic(err)

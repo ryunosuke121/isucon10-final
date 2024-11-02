@@ -207,6 +207,12 @@ func (*AdminService) Initialize(e echo.Context) error {
 		}
 	}()
 
+	go func() {
+		if _, err := http.Get("http://localhost:9001/api/group/collect"); err != nil {
+			log.Printf("failed to communicate with api pprotein: %v", err)
+		}
+	}()
+
 	return writeProto(e, http.StatusOK, res)
 }
 
