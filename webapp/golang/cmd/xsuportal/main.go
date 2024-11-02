@@ -10,6 +10,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -33,6 +34,7 @@ import (
 	contestantpb "github.com/isucon/isucon10-final/webapp/golang/proto/xsuportal/services/contestant"
 	registrationpb "github.com/isucon/isucon10-final/webapp/golang/proto/xsuportal/services/registration"
 	"github.com/isucon/isucon10-final/webapp/golang/util"
+	"github.com/kaz/pprotein/integration/standalone"
 )
 
 const (
@@ -118,6 +120,10 @@ func main() {
 	srv.POST("/api/login", contestant.Login)
 	srv.POST("/api/logout", contestant.Logout)
 
+	go func() {
+		standalone.Integrate(":19000")
+	}()
+
 	srv.Logger.Error(srv.StartServer(srv.Server))
 }
 
@@ -194,6 +200,13 @@ func (*AdminService) Initialize(e echo.Context) error {
 			Port: int64(port),
 		},
 	}
+
+	go func() {
+		if _, err := http.Get("http://localhost:9000/api/group/collect"); err != nil {
+			log.Printf("failed to communicate with pprotein: %v", err)
+		}
+	}()
+
 	return writeProto(e, http.StatusOK, res)
 }
 
