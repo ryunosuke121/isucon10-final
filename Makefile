@@ -9,6 +9,7 @@ BIN_NAME:=bin/xsuportal
 BUILD_DIR:=/home/isucon/webapp/golang
 CMD_MAINGO:=cmd/xsuportal/main.go
 SERVICE_NAME:=xsuportal-web-golang.service
+API_SERVICE_NAME:=xsuportal-api-golang.service
 
 DB_PATH:=/etc/mysql
 #NGINX_PATH:=/etc/nginx
@@ -25,7 +26,7 @@ setup: install-tools git-setup
 
 # 設定ファイルを取得してgit管理下に配置する
 .PHONY: get-conf
-get-conf: check-server-id get-db-conf get-service-file get-envsh
+get-conf: check-server-id get-db-conf get-service-file get-envsh get-api-service-file
 
 # リポジトリ内の設定ファイルをそれぞれ配置する
 .PHONY: deploy-conf
@@ -98,6 +99,11 @@ get-service-file:
 	sudo cp $(SYSTEMD_PATH)/$(SERVICE_NAME) ~/$(SERVER_ID)/etc/systemd/system/$(SERVICE_NAME)
 	sudo chown $(USER) ~/$(SERVER_ID)/etc/systemd/system/$(SERVICE_NAME)
 
+.PHONY: get-api-service-file
+get-api-service-file:
+	sudo cp $(SYSTEMD_PATH)/$(API_SERVICE_NAME) ~/$(SERVER_ID)/etc/systemd/system/$(API_SERVICE_NAME)
+	sudo chown $(USER) ~/$(SERVER_ID)/etc/systemd/system/$(API_SERVICE_NAME)
+
 .PHONY: get-envsh
 get-envsh:
 	cp ~/env ~/$(SERVER_ID)/home/isucon/env
@@ -113,6 +119,10 @@ deploy-nginx-conf:
 .PHONY: deploy-service-file
 deploy-service-file:
 	sudo cp ~/$(SERVER_ID)/etc/systemd/system/$(SERVICE_NAME) $(SYSTEMD_PATH)/$(SERVICE_NAME)
+
+.PHONY: deploy-api-service-file
+deploy-api-service-file:
+	sudo cp ~/$(SERVER_ID)/etc/systemd/system/$(API_SERVICE_NAME) $(SYSTEMD_PATH)/$(API_SERVICE_NAME)
 
 .PHONY: deploy-envsh
 deploy-envsh:
