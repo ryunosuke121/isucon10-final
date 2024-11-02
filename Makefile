@@ -7,6 +7,7 @@ include env
 USER:=isucon
 BIN_NAME:=bin/xsuportal
 BUILD_DIR:=/home/isucon/webapp/golang
+CMD_MAINGO:=cmd/xsuportal/main.go
 SERVICE_NAME:=xsuportal-web-golang.service
 
 DB_PATH:=/etc/mysql
@@ -120,7 +121,7 @@ deploy-envsh:
 .PHONY: build
 build:
 	cd $(BUILD_DIR); \
-	go build -o $(BIN_NAME)
+	go build -o $(BIN_NAME) $(CMD_MAINGO)
 
 .PHONY: restart
 restart:
